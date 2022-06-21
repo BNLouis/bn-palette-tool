@@ -17,7 +17,7 @@
   image-rendering: -webkit-optimize-contrast; /* Safari                        */
   image-rendering: -o-crisp-edges;            /* OS X & Windows Opera (12.02+) */
   image-rendering: pixelated;                 /* Awesome future-browsers       */
-  width: 50%;
+  width: 20%;
 }
 
 #refsprite-canvas {
@@ -26,5 +26,5 @@
   image-rendering: -webkit-optimize-contrast; /* Safari                        */
   image-rendering: -o-crisp-edges;            /* OS X & Windows Opera (12.02+) */
   image-rendering: pixelated;                 /* Awesome future-browsers       */
-  width: 50%;
+  width: 20%;
 }

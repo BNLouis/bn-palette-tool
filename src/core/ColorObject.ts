@@ -7,8 +7,15 @@ export default class ColorObject {
         this.paletteArray = paletteArray;
     }
 
+    static default() {
+        let defaultColor = new Uint8ClampedArray(4);
+        defaultColor[0]=255
+        defaultColor[1]=255
+        defaultColor[2]=255
+        defaultColor[3]=255
+        return new ColorObject(-1, defaultColor)
+    }
     toRgba() {
-
         return this.paletteArray[0] + ", " + this.paletteArray[1] + ", " + this.paletteArray[2] +", 255"
     }
 
@@ -17,7 +24,7 @@ export default class ColorObject {
      * @param hexColor 
      */
     importColor(hexColor: string) {
-        //Hex to Rgb!
+        //Hex to Rgb
         var bigint = parseInt(hexColor, 16);
         var r = (bigint >> 16) & 255;
         var g = (bigint >> 8) & 255;

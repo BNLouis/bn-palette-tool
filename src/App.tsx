@@ -13,7 +13,7 @@ function App() {
   const defaultPalette = new Array<ColorObject>()
   const defaultSprite = {}
   const defaultSprite2 = {}
-  const defaultColor = new ColorObject(-1, new Uint8ClampedArray);
+  const defaultColor = ColorObject.default();
   const [currentPalette, setCurrentPalette] = useState(defaultPalette)
   const [currentSprite, setCurrentSprite] = useState(defaultSprite)
   const [extraPalette, setExtraPalette] = useState(defaultPalette)
@@ -94,8 +94,29 @@ function App() {
     spriteManager.recolorSprite(currentPalette);
   }
 
+  /**
+   * supports retrieving colors by clicking on sprite.
+   * @param e Event
+   * @param index Index
+   */
+  const selectColorFromSprite = (e: any, index: number) => {
+    //primary color
+    if(index==1) {
+      let targetColor = spriteManager.getColorFromSprite(e, "sprite-canvas")
+      //now we need to look up what maps to this..
+      let index = findColorInCurrentPalette(currentPalette, targetColor)
+      targetColor.paletteIndex=index;
+      console.log(targetColor)
+      setCurrentColor(targetColor)
+    } else {
+    //secondary color
+      let sourceColor = spriteManager.getColorFromSprite(e, "refsprite-canvas")
+      selectSecondaryColor(sourceColor)
+    }
+  }
+
 /**
- * Recieves a new color from the SelectedColor Box.
+ * ColorSwap function
  * 
  * @param color New color to change
  */
@@ -112,29 +133,24 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">
-        <p>
-          Bn Palette Tool!
-        </p>
-      </header>
-      
+      Bn Palette Tool!
       <div className="canvas-containers">
       <div className="palette-containers">
         <PaletteDisplay title="Main Palette" palette={currentPalette} selectColorFunc={selectColor}></PaletteDisplay>
         <PaletteDisplay title="Imported Colors" palette={extraPalette} selectColorFunc={selectSecondaryColor}></PaletteDisplay>
       </div>
-      <canvas width="100px" height="64px" id="sprite-canvas"/>
-      <canvas width="100px" height="64px" id="refsprite-canvas"/>
+      <canvas onClick={(e)=>{selectColorFromSprite(e,1)}} id="sprite-canvas"/>
+      <canvas onClick={(e)=>{selectColorFromSprite(e,2)}} id="refsprite-canvas"/>
       <SelectedColor color={currentColor} secondaryColor={secondaryColor} updateColorFunc={updateCurrentColor}></SelectedColor>
       </div>
       <div className='canvas-containers'>
-      <p>Source Palette: right click to save</p>
+      <p>Result Palette: right click to save</p>
       <canvas width="256" height="1px" id="palette-canvas"/>
       </div>
       <input type="file" className="file-display" ref={inputPalette} onChange={importPalette}></input>
       <button onClick={onImportPalette}>Import Main Palette</button>
       <input type="file" className="file-display" ref={inputSprite} onChange={importSprite}></input>
-      <button onClick={onImportSprite}>Import Sprite
+      <button onClick={onImportSprite}>Import GrayScaled Sprite
       </button>
       <input type="file" className="file-display" ref={inputReferenceSprite} onChange={importReferenceSprite}></input>
       <button onClick={onImportReference}>Import Reference Sprite
@@ -149,14 +165,22 @@ function App() {
   );
 }
 
+/**
+ * 
+ * @param palette The palette to search
+ * @param targetColor The color we are searching for
+ * @returns 
+ */
+function findColorInCurrentPalette(palette: ColorObject[], targetColor: ColorObject): number {
+  let colorIndex = -1
+  palette.some((colorobj)=>{
+    if(colorobj.toRgba() === targetColor.toRgba()) {
+      colorIndex=colorobj.paletteIndex;
+      return true;
+    }
+  })
+  return colorIndex
+}
+
 export default App;
 
-
-function hexToRgb(hex: string) {
-  var bigint = parseInt(hex, 16);
-  var r = (bigint >> 16) & 255;
-  var g = (bigint >> 8) & 255;
-  var b = bigint & 255;
-
-  return r + "," + g + "," + b;
-}
