@@ -3,12 +3,22 @@
 }
 
 .file-display {
-  display: none
+  display: none;
 }
 
 .canvas-containers {
   display: flex;
-  margin: 10px
+  margin: 10px;
+}
+
+.canvas-box {
+  display: flex;
+  margin: 10px;
+  flex-direction: column;
+}
+
+body {
+  background-color: aliceblue;
 }
 
 button {
@@ -17,27 +27,34 @@ button {
   border-radius: 10px;
   margin: 2px;
   color: white;
-  padding: 15px 32px;
+  padding: 10px 32px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
 }
 
+.palette-containers {
+  background-color: rgba(0, 0, 0, 0.056);
+  min-width: 10vw;
+}
+
 #sprite-canvas {
-  image-rendering: optimizeSpeed;             /* Older versions of FF          */
-  image-rendering: -moz-crisp-edges;          /* FF 6.0+                       */
+  min-width: 20rem;
+  max-height: 20rem;
+  background-color: rgba(0, 0, 0, 0.111);
+}
+
+.canvas-sharp-edges {
+  image-rendering: optimizeSpeed; /* Older versions of FF          */
+  image-rendering: -moz-crisp-edges; /* FF 6.0+                       */
   image-rendering: -webkit-optimize-contrast; /* Safari                        */
-  image-rendering: -o-crisp-edges;            /* OS X & Windows Opera (12.02+) */
-  image-rendering: pixelated;                 /* Awesome future-browsers       */
-  width: 20%;
+  image-rendering: -o-crisp-edges; /* OS X & Windows Opera (12.02+) */
+  image-rendering: pixelated; /* Awesome future-browsers       */
 }
 
 #refsprite-canvas {
-  image-rendering: optimizeSpeed;             /* Older versions of FF          */
-  image-rendering: -moz-crisp-edges;          /* FF 6.0+                       */
-  image-rendering: -webkit-optimize-contrast; /* Safari                        */
-  image-rendering: -o-crisp-edges;            /* OS X & Windows Opera (12.02+) */
-  image-rendering: pixelated;                 /* Awesome future-browsers       */
-  width: 20%;
+  min-width: 20rem;
+  max-height: 20rem;
+  background-color: rgba(0, 0, 0, 0.056);
 }
