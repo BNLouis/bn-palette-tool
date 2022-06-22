@@ -33,7 +33,11 @@ export class PaletteManager {
     }
 
     parsePaletteImg(img: HTMLImageElement, context: CanvasRenderingContext2D, paletteData: any, callback: Function) {
-        img.onload = function() {
+        img.decode().then(()=> {
+            if(img.width != 256 || img.height!=1) {
+                callback(null)
+                return
+            }
             context.drawImage(img, 0, 0, 256, 1);
             let zeroesFound = 0
             for(let x = 0; x<256; x++) {
@@ -49,7 +53,11 @@ export class PaletteManager {
                 let paletteColor = new ColorObject(x, data)
                 paletteData.push(paletteColor)
                 }
-            }
+            
+        })
+        
+  
+
     }
 
     /**

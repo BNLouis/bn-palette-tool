@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {MutableRefObject, useRef, useState} from 'react';
 import './App.css';
 import { PaletteManager } from './service/PaletteManager';
 import PaletteDisplay from './ui/PaletteDisplay';
@@ -30,8 +30,15 @@ function App() {
     inputPalette.current.click()
   }
 
+  /**
+   * Runs when a sprite is imported. Requires pallete to be imported first.
+   */
   const onImportSprite = () => {
+    if(currentPalette.length!=0) {
     inputSprite.current.click()
+    } else {
+      alert("Import base palette first.")
+    }
   }
 
   const onImportExtra = () => {
@@ -54,8 +61,10 @@ function App() {
     let fileList = event.target.files
     if(fileList != null)
     {
+
       const file = fileList[0]
-      paletteManager.importPalette(file, setCurrentPalette)
+      paletteManager.importPalette(file, completePaletteImport)
+      event.target.value=""
     }
   }
 
@@ -64,7 +73,26 @@ function App() {
     if(fileList != null)
     {
       const file = fileList[0]
-      let newPalette = spriteManager.importSprite(file, setCurrentSprite)
+
+      spriteManager.importSprite(file, completeSpriteImport)
+      
+    }
+  }
+
+  const completeSpriteImport = () => {
+    spriteManager.recolorSprite(currentPalette)
+  }
+
+  /**
+   * Handles errors in palette parsing. For now, only accepts 256x1 images.
+   * @param paletteData 
+   */
+  const completePaletteImport = (paletteData: Array<ColorObject>) => {
+
+    if(paletteData==null) {
+      alert("Problem parsing palette. Ensure the file was a 256x1 image.")
+    } else {
+      setCurrentPalette(paletteData)
     }
   }
 
@@ -89,6 +117,7 @@ function App() {
   const addMoreColors = (newColors: Array<ColorObject>) => {
     setExtraPalette(extraPalette.concat(newColors))
   }
+
 
   const onRecolorSprite = () => {
     spriteManager.recolorSprite(currentPalette);
@@ -133,7 +162,7 @@ function App() {
 
   return (
     <div className="App">
-      Bn Palette Tool!
+      BattleNetwork Palette Tool
       <div className="canvas-containers">
       <div className="palette-containers">
         <PaletteDisplay title="Main Palette" palette={currentPalette} selectColorFunc={selectColor}></PaletteDisplay>
@@ -157,8 +186,6 @@ function App() {
       </button>
       <input type="file" className="file-display" ref={inputExtra} onChange={importExtraPalette}></input>
       <button onClick={onImportExtra}>Import Extra Colors
-      </button>
-      <button onClick={onRecolorSprite}>Recolor Sprite
       </button>
       <canvas width="256" height="1px" id="imported-colors"/>
     </div>

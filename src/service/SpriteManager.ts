@@ -42,8 +42,12 @@ export class SpriteManager {
         }
     }
 
-    recolorSprite(palette: Array<ColorObject>) {
-        //lets reload the grayscale file for now..
+    /**
+     * Function to recolor a sprite, also calls warning callback if error happens
+     * @param palette 
+     */
+    recolorSprite(palette: Array<ColorObject>)  {
+        //reload the grayscale file
         var img = new Image; 
         img.src = URL.createObjectURL(sourceFile);
         img.onload = function() {
@@ -59,13 +63,13 @@ export class SpriteManager {
         for (var i=0;i<imageData.data.length;i+=4)
         {
                 let index = imageData.data[i]
-                let paletteArray = palette[index].paletteArray
                 if(index < palette.length) {
+                    let paletteArray = palette[index].paletteArray
                     imageData.data[i]=paletteArray[0];
                     imageData.data[i+1]=paletteArray[1];
                     imageData.data[i+2]=paletteArray[2];
                     imageData.data[i+3]=paletteArray[3];
-                }
+                } 
             
         }
         // put the altered data back on the canvas  
