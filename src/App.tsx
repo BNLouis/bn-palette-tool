@@ -199,6 +199,7 @@ function App() {
       <input type="file" accept=".png" className="file-display" ref={inputExtra} onChange={importExtraPalette}></input>
       <button onClick={onImportExtra}>Import Extra Colors</button>
       <canvas width="256" height="1px" id="imported-colors" />
+      <a href="https://github.com/BNLouis/bn-palette-tool#readme">readme</a>
     </div>
   );
 }
