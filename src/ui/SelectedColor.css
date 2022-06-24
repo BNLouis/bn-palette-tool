@@ -1,3 +1,10 @@
 .selected-color {
   min-width: 10vw;
 }
+
+.color-display {
+  padding-top: 1vw;
+  padding-bottom: 1vw;
+  border-radius: 1em;
+  margin-bottom: 1vh;
+}

@@ -1,24 +1,37 @@
-import { useState } from "react";
+import React, { useRef, useState } from "react";
 import ColorObject from "../core/ColorObject";
 import "./SelectedColor.css";
 
 export function SelectedColor(props: any) {
-  const [color, setUpdateColor] = useState("ffffffff");
+  const inputCustomColor: any = useRef<HTMLInputElement | null>(null);
   const selectedColor = props.color as ColorObject;
   const secondaryColor = props.secondaryColor as ColorObject;
+  const updateColor: Function = props.updateColor;
+  const swapColor: Function = props.swapColor;
+
+  const setCustomColor = (event: React.ChangeEvent<HTMLInputElement>) => {
+    let newColor = ColorObject.fromHex(event.target.value);
+    updateColor(newColor);
+  };
   return (
     <div className="selectedColor">
-      <div style={{ backgroundColor: "rgba(" + selectedColor.toRgba() + ")" }}>
+      <div className="color-display" style={{ backgroundColor: "rgba(" + selectedColor.toRgba() + ")" }}>
         <p> Base Color </p>
-        <p>{selectedColor.toRgba()}</p>
       </div>
-      <div style={{ backgroundColor: "rgba(" + secondaryColor.toRgba() + ")" }}>
+      <div className="color-display" style={{ backgroundColor: "rgba(" + secondaryColor.toRgba() + ")" }}>
         <p> Replacement Color </p>
-        <p>{selectedColor.toRgba()}</p>
       </div>
       <button
         onClick={() => {
-          props.updateColorFunc(secondaryColor);
+          inputCustomColor.current.click();
+        }}
+      >
+        Select Custom Color
+      </button>
+      <input type="color" className="file-display" ref={inputCustomColor} onChange={setCustomColor}></input>
+      <button
+        onClick={() => {
+          swapColor(secondaryColor);
         }}
       >
         Swap Colors

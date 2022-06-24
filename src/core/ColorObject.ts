@@ -19,17 +19,20 @@ export default class ColorObject {
   }
 
   /**
-   * Takes a hex color, transforms it into rgb, and saves it in this colorobject.
+   * returns new color from hex value
    * @param hexColor
+   * @returns
    */
-  importColor(hexColor: string) {
-    //Hex to Rgb
-    var bigint = parseInt(hexColor, 16);
+  static fromHex(hexColor: string) {
+    let newColor = new ColorObject(-1, new Uint8ClampedArray(4));
+    var bigint = parseInt(hexColor.substring(1), 16);
     var r = (bigint >> 16) & 255;
     var g = (bigint >> 8) & 255;
     var b = bigint & 255;
-    this.paletteArray[0] = r;
-    this.paletteArray[1] = g;
-    this.paletteArray[2] = b;
+    newColor.paletteArray[0] = r;
+    newColor.paletteArray[1] = g;
+    newColor.paletteArray[2] = b;
+    newColor.paletteArray[3] = 255;
+    return newColor;
   }
 }

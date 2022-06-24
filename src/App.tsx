@@ -1,4 +1,4 @@
-import React, { MutableRefObject, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import "./App.css";
 import { PaletteManager } from "./service/PaletteManager";
 import PaletteDisplay from "./ui/PaletteDisplay";
@@ -34,7 +34,7 @@ function App() {
    * Runs when a sprite is imported. Requires pallete to be imported first.
    */
   const onImportSprite = () => {
-    if (currentPalette.length != 0) {
+    if (currentPalette.length !== 0) {
       inputSprite.current.click();
     } else {
       alert("Import base palette first.");
@@ -115,10 +115,6 @@ function App() {
     setExtraPalette(extraPalette.concat(newColors));
   };
 
-  const onRecolorSprite = () => {
-    spriteManager.recolorSprite(currentPalette);
-  };
-
   /**
    * supports retrieving colors by clicking on sprite.
    * @param e Event
@@ -126,7 +122,7 @@ function App() {
    */
   const selectColorFromSprite = (e: any, index: number) => {
     //primary color
-    if (index == 1) {
+    if (index === 1) {
       let targetColor = spriteManager.getColorFromSprite(e, "sprite-canvas");
       //now we need to look up what maps to this..
       let index = findColorInCurrentPalette(currentPalette, targetColor);
@@ -184,7 +180,12 @@ function App() {
             id="refsprite-canvas"
           />
         </div>
-        <SelectedColor color={currentColor} secondaryColor={secondaryColor} updateColorFunc={updateCurrentColor}></SelectedColor>
+        <SelectedColor
+          color={currentColor}
+          secondaryColor={secondaryColor}
+          swapColor={updateCurrentColor}
+          updateColor={selectSecondaryColor}
+        ></SelectedColor>
       </div>
       <div className="canvas-containers">
         <p>Result Palette: right click to save</p>
@@ -217,6 +218,7 @@ function findColorInCurrentPalette(palette: ColorObject[], targetColor: ColorObj
       colorIndex = colorobj.paletteIndex;
       return true;
     }
+    return false;
   });
   return colorIndex;
 }
