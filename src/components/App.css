@@ -40,8 +40,7 @@ button {
 }
 
 #sprite-canvas {
-  min-width: 20rem;
-  max-height: 20rem;
+  min-width: 30rem;
   background-color: rgba(0, 0, 0, 0.111);
 }
 
