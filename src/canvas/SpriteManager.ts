@@ -33,7 +33,7 @@ export class SpriteManager {
       sourceFile = file;
     }
     let canvas = document.getElementById(canvasId) as HTMLCanvasElement;
-    canvas.style.width = "200%";
+    canvas.style.width = "100%";
     let context = canvas.getContext("2d") as CanvasRenderingContext2D;
     var img = new Image();
     img.src = URL.createObjectURL(file);

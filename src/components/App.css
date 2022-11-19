@@ -15,7 +15,7 @@
   display: flex;
   margin: 10px;
   flex-direction: column;
-  min-width: 30vw;
+  min-width: 35vw;
 }
 
 body {
@@ -50,7 +50,7 @@ button {
 
 .sprite-inner-container {
   max-height: 16rem;
-  max-width: 16rem;
+  max-width: 100%;
 }
 
 #sprite-canvas {
