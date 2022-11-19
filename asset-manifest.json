@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/bn-palette-tool/static/css/main.ba8abdb3.css",
-    "main.js": "/bn-palette-tool/static/js/main.b3bd433d.js",
+    "main.css": "/bn-palette-tool/static/css/main.aa01a689.css",
+    "main.js": "/bn-palette-tool/static/js/main.d9d2112c.js",
     "static/js/787.d228524a.chunk.js": "/bn-palette-tool/static/js/787.d228524a.chunk.js",
     "index.html": "/bn-palette-tool/index.html",
-    "main.ba8abdb3.css.map": "/bn-palette-tool/static/css/main.ba8abdb3.css.map",
-    "main.b3bd433d.js.map": "/bn-palette-tool/static/js/main.b3bd433d.js.map",
+    "main.aa01a689.css.map": "/bn-palette-tool/static/css/main.aa01a689.css.map",
+    "main.d9d2112c.js.map": "/bn-palette-tool/static/js/main.d9d2112c.js.map",
     "787.d228524a.chunk.js.map": "/bn-palette-tool/static/js/787.d228524a.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.ba8abdb3.css",
-    "static/js/main.b3bd433d.js"
+    "static/css/main.aa01a689.css",
+    "static/js/main.d9d2112c.js"
   ]
 }
