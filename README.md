@@ -27,4 +27,4 @@ V1.1
 
 V1.2
 
-- better support for large spritesheets
+- Scrolling and zooming added to spritesheet preview ✅

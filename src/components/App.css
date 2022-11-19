@@ -15,6 +15,7 @@
   display: flex;
   margin: 10px;
   flex-direction: column;
+  min-width: 30vw;
 }
 
 body {
@@ -26,12 +27,16 @@ button {
   border: none;
   border-radius: 10px;
   margin: 2px;
-  color: white;
   padding: 10px 32px;
+  color: white;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
+}
+
+.image-button {
+  padding: 2px 12px;
 }
 
 .palette-containers {
@@ -39,9 +44,18 @@ button {
   min-width: 10vw;
 }
 
+.sprite-container {
+  overflow: auto;
+}
+
+.sprite-inner-container {
+  max-height: 16rem;
+  max-width: 16rem;
+}
+
 #sprite-canvas {
-  min-width: 30rem;
   background-color: rgba(0, 0, 0, 0.111);
+  text-align: center;
 }
 
 .canvas-sharp-edges {
@@ -53,7 +67,5 @@ button {
 }
 
 #refsprite-canvas {
-  min-width: 20rem;
-  max-height: 20rem;
   background-color: rgba(0, 0, 0, 0.056);
 }

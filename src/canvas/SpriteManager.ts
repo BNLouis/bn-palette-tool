@@ -28,9 +28,12 @@ export class SpriteManager {
     };
   }
 
-  importSprite(file: File, callback: Function) {
-    sourceFile = file;
-    let canvas = document.getElementById("sprite-canvas") as HTMLCanvasElement;
+  importSprite(file: File, canvasId: string, isSourceFile: boolean, callback: Function) {
+    if (isSourceFile) {
+      sourceFile = file;
+    }
+    let canvas = document.getElementById(canvasId) as HTMLCanvasElement;
+    canvas.style.width = "200%";
     let context = canvas.getContext("2d") as CanvasRenderingContext2D;
     var img = new Image();
     img.src = URL.createObjectURL(file);
@@ -39,21 +42,8 @@ export class SpriteManager {
       canvas.height = img.height;
       spriteWidth = img.width;
       spriteHeight = img.height;
+
       context.drawImage(img, 0, 0, img.width, img.height, 0, 0, img.width, img.height);
-      callback();
-    };
-  }
-
-  importRefSprite(file: File, callback: Function) {
-    let canvas = document.getElementById("refsprite-canvas") as HTMLCanvasElement;
-    let context = canvas.getContext("2d") as CanvasRenderingContext2D;
-    var img = new Image();
-    img.src = URL.createObjectURL(file);
-    img.onload = function () {
-      canvas.width = canvasWidth;
-      canvas.height = canvasWidth;
-      context.drawImage(img, 0, 0, canvasWidth, canvasWidth, 0, 0, canvasWidth, canvasWidth);
-
       callback();
     };
   }

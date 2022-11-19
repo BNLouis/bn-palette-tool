@@ -7,6 +7,7 @@ import { SelectedColor } from "../ui/SelectedColor";
 import ColorObject from "../core/ColorObject";
 import FileSelect from "./FileSelect";
 import { FileInputProps } from "../core/FileInputProps";
+import { CanvasDisplay } from "./CanvasDisplay";
 
 let paletteManager = PaletteManager.getInstance();
 let spriteManager = SpriteManager.getInstance();
@@ -78,7 +79,7 @@ function Main() {
     if (fileList != null) {
       const file = fileList[0];
 
-      spriteManager.importSprite(file, completeSpriteImport);
+      spriteManager.importSprite(file, "sprite-canvas", true, completeSpriteImport);
     }
   };
 
@@ -118,7 +119,7 @@ function Main() {
     let fileList = event.target.files;
     if (fileList != null) {
       const file = fileList[0];
-      spriteManager.importRefSprite(file, setReferenceSprite);
+      spriteManager.importSprite(file, "refsprite-canvas", false, setReferenceSprite);
     }
   };
 
@@ -212,22 +213,20 @@ function Main() {
         </div>
         <div className="canvas-box ">
           Base Sprite
-          <canvas
-            className="canvas-sharp-edges"
-            onClick={(e) => {
-              selectColorFromSprite(e, 1);
+          <CanvasDisplay
+            onClick={(event: any) => {
+              selectColorFromSprite(event, 1);
             }}
-            id="sprite-canvas"
+            canvasId="sprite-canvas"
           />
         </div>
         <div className="canvas-box">
           Reference Sprite
-          <canvas
-            className="canvas-sharp-edges"
-            onClick={(e) => {
-              selectColorFromSprite(e, 2);
+          <CanvasDisplay
+            onClick={(event: any) => {
+              selectColorFromSprite(event, 2);
             }}
-            id="refsprite-canvas"
+            canvasId="refsprite-canvas"
           />
         </div>
         <SelectedColor
