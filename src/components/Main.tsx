@@ -109,9 +109,11 @@ function Main() {
 
   const completeSpriteSheetImport = (paletteData: Array<ColorObject>) => {
     if (paletteData == null) {
-      alert("Problem parsing palette. Ensure the file was a 256x1 image.");
+      alert("Problem parsing palette..");
     } else {
       setCurrentPalette(paletteData);
+      spriteManager.grayscaleSprite(paletteData);
+      paletteManager.sendPaletteToImage(paletteData);
     }
   };
 

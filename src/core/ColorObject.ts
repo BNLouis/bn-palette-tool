@@ -18,6 +18,15 @@ export default class ColorObject {
     return this.paletteArray[0] + ", " + this.paletteArray[1] + ", " + this.paletteArray[2] + ", 255";
   }
 
+  static fromRgb(r: number, g: number, b: number) {
+    let newColor = new Uint8ClampedArray(4);
+    newColor[0] = r;
+    newColor[1] = g;
+    newColor[2] = b;
+    newColor[3] = 255;
+    return new ColorObject(-1, newColor);
+  }
+
   /**
    * returns new color from hex value
    * @param hexColor

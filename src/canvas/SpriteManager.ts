@@ -14,6 +14,11 @@ export class SpriteManager {
     return instance;
   }
 
+  /**
+   * Will parse as grayscaled and try to generate palette.
+   * @param file
+   * @param callback
+   */
   importSpriteSheet(file: File, callback: Function) {
     sourceFile = file;
     let canvas = document.getElementById("sprite-canvas") as HTMLCanvasElement;
@@ -24,7 +29,27 @@ export class SpriteManager {
       canvas.width = img.width;
       canvas.height = img.height;
       context.drawImage(img, 0, 0, img.width, img.height, 0, 0, img.width, img.height);
-      callback();
+      // pull the entire image into an array of pixel data
+      var imageData = context.getImageData(0, 0, img.width, img.height);
+      let colorPalette: Array<ColorObject> = new Array();
+      for (var i = 0; i < imageData.data.length; i += 4) {
+        let paletteArray = new Uint8ClampedArray(4);
+        let currentIndex = paletteArray.length - 1;
+        paletteArray[0] = imageData.data[i];
+        paletteArray[1] = imageData.data[i + 1];
+        paletteArray[2] = imageData.data[i + 2];
+        paletteArray[3] = imageData.data[i + 3];
+        let newColor: ColorObject = new ColorObject(currentIndex, paletteArray);
+        //if color doesnt exists in palette.
+        if (
+          !colorPalette.some((elem) => {
+            return elem.toRgba() === newColor.toRgba();
+          })
+        ) {
+          colorPalette.push(newColor);
+        }
+      }
+      callback(colorPalette);
     };
   }
 
@@ -44,12 +69,13 @@ export class SpriteManager {
       spriteHeight = img.height;
 
       context.drawImage(img, 0, 0, img.width, img.height, 0, 0, img.width, img.height);
+
       callback();
     };
   }
 
   /**
-   * Function to recolor a sprite, also calls warning callback if error happens
+   * Function to recolor a grayscaledsprite, also calls warning callback if error happens
    * @param palette
    */
   recolorSprite(palette: Array<ColorObject>) {
@@ -79,6 +105,48 @@ export class SpriteManager {
       // put the altered data back on the canvas
       context.putImageData(imageData, 0, 0);
     };
+  }
+
+  /**
+   * Converts sprite to grayscale.
+   * @param palette palette
+   */
+  grayscaleSprite(palette: Array<ColorObject>) {
+    //reload the grayscale file
+    var img = new Image();
+    let spriteManager = this;
+    img.src = URL.createObjectURL(sourceFile);
+    img.onload = function () {
+      let canvas = document.getElementById("sprite-canvas") as HTMLCanvasElement;
+      let context = canvas.getContext("2d") as CanvasRenderingContext2D;
+      context.drawImage(img, 0, 0, img.width, img.height, 0, 0, img.width, img.height);
+      context.imageSmoothingEnabled = false;
+
+      // pull the entire image into an array of pixel data
+      var imageData = context.getImageData(0, 0, img.width, img.height);
+      // examine every pixel,
+      // change any old rgb to the new-rgb
+      for (var i = 0; i < imageData.data.length; i += 4) {
+        let replaceIndex = spriteManager.findReplaceValue(imageData.data, i, palette);
+        imageData.data[i] = replaceIndex;
+        imageData.data[i + 1] = replaceIndex;
+        imageData.data[i + 2] = replaceIndex;
+        if (replaceIndex == 0) {
+          imageData.data[i + 3] = 0;
+        } else {
+          imageData.data[i + 3] = 255;
+        }
+      }
+      // put the altered data back on the canvas
+      context.putImageData(imageData, 0, 0);
+    };
+  }
+
+  findReplaceValue(data: Uint8ClampedArray, startIndex: number, palette: ColorObject[]): number {
+    return palette.findIndex((colorObj) => {
+      let inputColor = ColorObject.fromRgb(data[startIndex], data[startIndex + 1], data[startIndex + 2]);
+      return inputColor.toRgba() == colorObj.toRgba();
+    });
   }
 
   getColorFromSprite(e: React.MouseEvent, canvasId: string) {

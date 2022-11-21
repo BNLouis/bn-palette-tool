@@ -9,8 +9,8 @@ function FileSelect(props: any) {
 
   return (
     <>
-      {/* <input type="file" accept=".png" className="file-display" ref={spritesheetProps.ref} onChange={spritesheetProps.importFile}></input>
-      <button onClick={spritesheetProps.onClick}>Import SpriteSheet</button> */}
+      <input type="file" accept=".png" className="file-display" ref={spritesheetProps.ref} onChange={spritesheetProps.importFile}></input>
+      <button onClick={spritesheetProps.onClick}>Create Grayscaled Sprite</button>
       <input type="file" accept=".png" className="file-display" ref={paletteProps.ref} onChange={paletteProps.importFile}></input>
       <button onClick={paletteProps.onClick}>Import Palette to Edit</button>
       <input type="file" accept=".png" className="file-display" ref={spriteProps.ref} onChange={spriteProps.importFile}></input>

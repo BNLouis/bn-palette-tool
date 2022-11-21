@@ -52,6 +52,29 @@ export class PaletteManager {
   }
 
   /**
+   * Send the current palette to image
+   * @param palette
+   */
+  sendPaletteToImage(palette: Array<ColorObject>) {
+    let canvas = document.getElementById("palette-canvas") as HTMLCanvasElement;
+    let context = canvas.getContext("2d") as CanvasRenderingContext2D;
+
+    // pull the entire image into an array of pixel data
+    var imageData = context.getImageData(0, 0, 256, 1);
+    palette.forEach((color, i) => {
+      let index = i * 4;
+      let paletteArray = color.paletteArray;
+      imageData.data[index] = paletteArray[0];
+      imageData.data[index + 1] = paletteArray[1];
+      imageData.data[index + 2] = paletteArray[2];
+      imageData.data[index + 3] = paletteArray[3];
+    });
+
+    // put the altered data back on the canvas
+    context.putImageData(imageData, 0, 0);
+  }
+
+  /**
    * replaces a color
    * @param newColor
    */
