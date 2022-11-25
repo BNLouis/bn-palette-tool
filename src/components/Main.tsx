@@ -78,7 +78,9 @@ function Main() {
     let fileList = event.target.files;
     if (fileList != null) {
       const file = fileList[0];
-
+      if (!file) {
+        return;
+      }
       spriteManager.importSprite(file, "sprite-canvas", true, completeSpriteImport);
     }
   };
