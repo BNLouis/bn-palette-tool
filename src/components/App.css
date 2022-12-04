@@ -39,6 +39,10 @@ button {
   padding: 2px 12px;
 }
 
+.palette-button {
+  padding: 2px 12px;
+}
+
 .palette-containers {
   background-color: rgba(0, 0, 0, 0.056);
   min-width: 10vw;
@@ -68,4 +72,12 @@ button {
 
 #refsprite-canvas {
   background-color: rgba(0, 0, 0, 0.056);
+}
+
+.modalShown {
+  opacity: 100;
+}
+
+.modalHidden {
+  opacity: 0;
 }

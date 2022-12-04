@@ -15,6 +15,10 @@ export class SpriteManager {
     return instance;
   }
 
+  srcSpriteImported() {
+    return sourceFile != null;
+  }
+
   /**
    * Will parse as grayscaled and try to generate palette.
    * @param file
@@ -23,19 +27,21 @@ export class SpriteManager {
   importSpriteSheet(file: File, callback: Function) {
     sourceFile = file;
     let canvas = document.getElementById("sprite-canvas") as HTMLCanvasElement;
+    let canvasId = "sprite-canvas";
     let context = canvas.getContext("2d") as CanvasRenderingContext2D;
     var img = new Image();
     img.src = URL.createObjectURL(file);
     img.onload = function () {
       canvas.width = img.width;
       canvas.height = img.height;
+      spriteDetails.set(canvasId, { width: img.width, height: img.height });
       context.drawImage(img, 0, 0, img.width, img.height, 0, 0, img.width, img.height);
       // pull the entire image into an array of pixel data
       var imageData = context.getImageData(0, 0, img.width, img.height);
       let colorPalette: Array<ColorObject> = new Array();
       for (var i = 0; i < imageData.data.length; i += 4) {
         let paletteArray = new Uint8ClampedArray(4);
-        let currentIndex = paletteArray.length - 1;
+        let currentIndex = colorPalette.length;
         paletteArray[0] = imageData.data[i];
         paletteArray[1] = imageData.data[i + 1];
         paletteArray[2] = imageData.data[i + 2];
@@ -84,12 +90,14 @@ export class SpriteManager {
     img.src = URL.createObjectURL(sourceFile);
     img.onload = function () {
       let canvas = document.getElementById("sprite-canvas") as HTMLCanvasElement;
+      let gray_canvas = document.getElementById("greyscale-canvas") as HTMLCanvasElement;
+
       let context = canvas.getContext("2d") as CanvasRenderingContext2D;
-      context.drawImage(img, 0, 0, img.width, img.height, 0, 0, img.width, img.height);
-      context.imageSmoothingEnabled = false;
+      let graycontext = gray_canvas.getContext("2d") as CanvasRenderingContext2D;
 
       // pull the entire image into an array of pixel data
-      var imageData = context.getImageData(0, 0, img.width, img.height);
+      spriteDetails.set("sprite-canvas", { width: img.width, height: img.height });
+      var imageData = graycontext.getImageData(0, 0, img.width, img.height);
       // examine every pixel,
       // change any old rgb to the new-rgb
       for (var i = 0; i < imageData.data.length; i += 4) {
@@ -118,7 +126,9 @@ export class SpriteManager {
     img.src = URL.createObjectURL(sourceFile);
     img.onload = function () {
       let canvas = document.getElementById("sprite-canvas") as HTMLCanvasElement;
+      let gray_canvas = document.getElementById("greyscale-canvas") as HTMLCanvasElement;
       let context = canvas.getContext("2d") as CanvasRenderingContext2D;
+      let graycontext = gray_canvas.getContext("2d") as CanvasRenderingContext2D;
       context.drawImage(img, 0, 0, img.width, img.height, 0, 0, img.width, img.height);
       context.imageSmoothingEnabled = false;
 
@@ -139,6 +149,7 @@ export class SpriteManager {
       }
       // put the altered data back on the canvas
       context.putImageData(imageData, 0, 0);
+      graycontext.putImageData(imageData, 0, 0);
     };
   }
 

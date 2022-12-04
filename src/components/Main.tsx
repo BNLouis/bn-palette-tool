@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import "./App.css";
+import "./Modal.css";
 import { PaletteManager } from "../canvas/PaletteManager";
 import PaletteDisplay from "../ui/PaletteDisplay";
 import { SpriteManager } from "../canvas/SpriteManager";
@@ -28,6 +29,7 @@ function Main() {
   const extraRef: any = useRef<HTMLInputElement | null>(null);
   const referenceSpriteRef: any = useRef<HTMLInputElement | null>(null);
   const spriteSheetRef: any = useRef<HTMLInputElement | null>(null);
+  const [modalShowed, setModalShowed] = useState(false);
 
   //filedialog handlers
   const onImportPalette = () => {
@@ -42,11 +44,7 @@ function Main() {
    * Runs when a sprite is imported. Requires pallete to be imported first.
    */
   const onImportSprite = () => {
-    if (currentPalette.length !== 0) {
-      spriteRef.current.click();
-    } else {
-      alert("Import base palette first.");
-    }
+    spriteRef.current.click();
   };
 
   const onImportExtra = () => {
@@ -74,14 +72,14 @@ function Main() {
     }
   };
 
-  const importSprite = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const importGraySprite = (event: React.ChangeEvent<HTMLInputElement>) => {
     let fileList = event.target.files;
     if (fileList != null) {
       const file = fileList[0];
       if (!file) {
         return;
       }
-      spriteManager.importSprite(file, "sprite-canvas", true, completeSpriteImport);
+      spriteManager.importSprite(file, "greyscale-canvas", true, completeSpriteImport);
     }
   };
 
@@ -98,6 +96,9 @@ function Main() {
       alert("Problem parsing palette. Ensure the file was a 256x1 image.");
     } else {
       setCurrentPalette(paletteData);
+      if (spriteManager.srcSpriteImported()) {
+        spriteManager.recolorSprite(paletteData);
+      }
     }
   };
 
@@ -113,9 +114,10 @@ function Main() {
     if (paletteData == null) {
       alert("Problem parsing palette..");
     } else {
-      setCurrentPalette(paletteData);
       spriteManager.grayscaleSprite(paletteData);
       paletteManager.sendPaletteToImage(paletteData);
+      setCurrentPalette(paletteData);
+      spriteManager.recolorSprite(paletteData);
     }
   };
 
@@ -193,7 +195,7 @@ function Main() {
   };
   let spriteProps: FileInputProps = {
     ref: spriteRef,
-    importFile: importSprite,
+    importFile: importGraySprite,
     onClick: onImportSprite,
   };
   let extraProps: FileInputProps = {
@@ -206,6 +208,23 @@ function Main() {
     importFile: importReferenceSprite,
     onClick: onImportReference,
   };
+
+  let exportMenuHandler = {
+    toggle_show: () => {
+      setModalShowed(!modalShowed);
+    },
+  };
+
+  let modalShowedClass = modalShowed ? "modal display-block" : "modal display-none";
+
+  let setPalette = (
+    <>
+      <input type="file" accept=".png" className="file-display" ref={paletteProps.ref} onChange={paletteProps.importFile}></input>
+      <button className="palette-button" onClick={paletteProps.onClick}>
+        Set Palette
+      </button>
+    </>
+  );
 
   return (
     <div className="App">
@@ -222,6 +241,7 @@ function Main() {
               selectColorFromSprite(event, 1);
             }}
             canvasId="sprite-canvas"
+            customControls={setPalette}
           />
         </div>
         <div className="canvas-box">
@@ -240,11 +260,18 @@ function Main() {
           updateColor={selectSecondaryColor}
         ></SelectedColor>
       </div>
-      <div className="canvas-containers">
-        <p>Result Palette: right click to save</p>
-        <canvas className="canvas-sharp-edges" width="256" height="1px" id="palette-canvas" />
+      <div className={modalShowedClass}>
+        <div className="modal-main">
+          <div className="canvas-containers">
+            <p>Result Palette: right click to save</p>
+            <canvas className="canvas-sharp-edges" width="256" height="1px" id="palette-canvas" />
+            <p>Grayscaled Image: right click to save</p>
+            <canvas className="canvas-sharp-edges" width="256" height="256px" id="greyscale-canvas" />
+          </div>
+          <button onClick={exportMenuHandler.toggle_show}>Cancel</button>
+        </div>
       </div>
-      <FileSelect {...{ spritesheetProps, paletteProps, spriteProps, extraProps, refProps }} />
+      <FileSelect {...{ spritesheetProps, paletteProps, spriteProps, extraProps, refProps, exportMenuHandler }} />
       <canvas width="256" height="1px" id="imported-colors" />
       <a href="https://github.com/BNLouis/bn-palette-tool#readme">readme</a>
     </div>

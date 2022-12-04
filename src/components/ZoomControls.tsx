@@ -5,15 +5,16 @@ enum Zoom {
 
 export function ZoomControls(props: any) {
   let canvasId = props.canvasId;
+  let customControls = props.customControls;
   let handleClick = (zoomType: Zoom) => {
     let canvas = document.getElementById(canvasId) as HTMLCanvasElement;
     let W = parseInt(canvas.style.width);
     if (Number.isNaN(W)) {
       W = 100;
     }
-    if (zoomType == Zoom.In) {
+    if (zoomType === Zoom.In) {
       W *= 1.2;
-    } else if (zoomType == Zoom.Out) {
+    } else if (zoomType === Zoom.Out) {
       W *= 0.8;
     }
     canvas.style.width = W + "%";
@@ -39,6 +40,7 @@ export function ZoomControls(props: any) {
             />
           </svg>
         </button>
+        {customControls}
       </div>
     </>
   );
