@@ -1,6 +1,6 @@
 {
   "name": "bn-palette-tool",
-  "version": "1.1.0",
+  "version": "1.3.0",
   "homepage": "https://bnlouis.github.io/bn-palette-tool",
   "private": true,
   "dependencies": {
